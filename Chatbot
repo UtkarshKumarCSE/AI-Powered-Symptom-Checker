@@ -1,0 +1,221 @@
+//USED index.html for the below file!!//
+//THANKS//
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbox</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #2575fc;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 15px;
+            background: #eee;
+            gap: 10px;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-footer button {
+            padding: 10px 20px;
+            background: #2575fc;
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-footer button:hover {
+            background: #1b59c9;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .bot-message {
+            background: #e1f5e1;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: #d1e1f7;
+            color: #333;
+            align-self: flex-end;
+        }
+
+        /* Scrollbar Styling */
+        .chat-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-body::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            AI Chatbox
+        </div>
+        <div class="chat-body" id="chat-body">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const chatBody = document.getElementById('chat-body');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Predefined bot responses
+        const botResponses = {
+            "hello": "Hi there! How can I assist you today?",
+            "how are you": "I'm just a bot, but I'm doing great! How about you?",
+            "i have cold": "If you have a cold, you can expect symptoms such as a sore throat, sneezing, a blocked or runny nose, and possibly a low-grade fever. These symptoms usually last for about a week but can persist for up to two weeks. Here are some steps you can take to manage your symptoms:Stay hydrated: Drink plenty of fluids like water, warm tea, or broth to soothe your throat and keep your body hydrated.Rest: Get plenty of sleep and avoid strenuous activities to help your body fight the virus.Use over-the-counter medications: You can use decongestants, antihistamines, and pain relievers like ibuprofen or acetaminophen to reduce your symptoms. However, do not give over-the-counter cold medicines to children under age 4.Humidify the air: Using a humidifier or leaving a shallow bowl of water out can help ease congestion.Gargle with salt water: A saltwater gargle can help reduce the pain and swelling of a sore throat.Avoid smoking and secondhand smoke: These can irritate your throat and lungs, worsening your symptoms.",
+            "i have anxiety": "f you are experiencing anxiety, it’s important to understand that anxiety can be a normal reaction to stress, but when it becomes overwhelming and persistent, it may indicate an anxiety disorder. Here are some key points to consider:Symptoms: Common symptoms of anxiety include feelings of fear, dread, and uneasiness, sweating, a rapid heartbeat, and restlessness. You might also experience worry that is out of proportion to the situation, such as excessive worry about health, work, or family issues.Types of Anxiety Disorders: There are several types of anxiety disorders, including generalized anxiety disorder (GAD), panic disorder, specific phobias, social anxiety disorder, and post-traumatic stress disorder (PTSD). Each type has specific symptoms and may require different treatment approaches.Seeking Help: If your anxiety is affecting your daily life or causing you distress, it’s advisable to see a healthcare provider. They can diagnose your condition based on your symptoms and may refer you to a mental health professional for further evaluation.Treatment Options: Effective treatments for anxiety disorders often include a combination of medication and psychotherapy (talk therapy). Common medications include antidepressants and, in some cases, benzodiazepines. Cognitive behavioral therapy (CBT) is a widely used form of psychotherapy that can help you manage your symptoms by changing your thought patterns and behaviors.Self-Help Strategies: In addition to professional help, you can try various self-help strategies to manage your anxiety, such as practicing mindfulness, maintaining a healthy lifestyle, and seeking support from friends, family, or support groups..",
+            "i have fever": "If you have a fever, it’s important to understand what it means and how to manage it. A fever is typically defined as a body temperature of 100.4°F (38°C) or higher. This rise in body temperature is usually a sign that your body is fighting an infection or illness.For adults, a fever is generally not a cause for immediate concern unless it reaches 103°F (39.4°C) or higher, or if it persists for several days. If your fever is accompanied by any of the following symptoms, you should seek medical attention",
+            "bye": "Goodbye! Have a great day!",
+            "dj": "gaand marao",
+            "default": "I'm sorry, I don't understand. Can you rephrase that?"
+        };
+
+        // Function to add a message to the chat
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            messageDiv.textContent = content;
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll
+        }
+
+        // Function to handle user input
+        function handleUserInput() {
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                addMessage(userMessage, 'user'); // Add user message to the chat
+                generateBotResponse(userMessage); // Generate bot response
+                userInput.value = ''; // Clear input field
+            }
+        }
+
+        // Function to generate bot response
+        function generateBotResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            const response = botResponses[message] || botResponses["default"];
+            setTimeout(() => addMessage(response, 'bot'), 500); // Simulate delay
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+    </script>
+</body>
+</html>
